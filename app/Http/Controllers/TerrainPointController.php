@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MountainGroup;
+use App\Models\Section;
 use App\Models\TerrainPoint;
 use Illuminate\Http\Request;
+use App\Models\MountainGroup;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class TerrainPointController extends Controller
 {
@@ -60,8 +62,32 @@ class TerrainPointController extends Controller
      */
     public function destroy(TerrainPoint $terrainPoint)
     {
-        $terrainPoint->delete();
-        return response()->json(['message' => 'Terrain point deleted']);
+        // Sprawdzamy, czy któryś z punktów terenu A lub B sekcji odcinka zawiera punkt o danym ID
+        $sections = $terrainPoint->terrainPointAs->merge($terrainPoint->terrainPointBs);
+        $containsPoint = $sections->contains(function ($section) use ($terrainPoint) {
+            return $section->terrainPointAs && $section->terrainPointBs && ($section->terrainPointAs->contains($terrainPoint) || $section->terrainPointBs->contains($terrainPoint));
+        });
+        
+        if ($containsPoint) 
+        {
+            $this->deleteTerrainPointAndSection($terrainPoint->id);
+        } 
+        else 
+        {
+            $terrainPoint->delete();
+        }
+        return response()->json(['message' => 'Terrain point deleted successfully']);
+    }
+
+    private function deleteTerrainPointAndSection(int $terrainPointId)
+    {
+        DB::transaction(function () use ($terrainPointId) 
+        {
+            $terrainPoint = TerrainPoint::findOrFail($terrainPointId);
+            $sections = $terrainPoint->terrainPointAs->merge($terrainPoint->terrainPointBs)->map(fn ($section) => $section->id)->toArray();
+            Section::whereIn('id', $sections)->delete();
+            $terrainPoint->delete();
+        });
     }
 }
 
