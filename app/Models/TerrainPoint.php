@@ -12,11 +12,11 @@ class TerrainPoint extends Model
 
     public function terrainPointAs(): HasMany
     {
-        return $this->hasMany("terrain_point_a");
+        return $this->hasMany(Section::class, "terrain_point_a_id", "id");
     }
 
     public function terrainPointBs(): HasMany
     {
-        return $this->hasMany("terrain_point_b");
+        return $this->hasMany(Section::class, "terrain_point_b_id", "id");
     }
 }
