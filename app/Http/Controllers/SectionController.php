@@ -26,6 +26,7 @@ class SectionController extends Controller
         $section->terrain_point_b_id = $request->input('terrain_point_b_id');
         $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
         $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
+        $section->intermediate_points = json_encode($request->input('intermediate_points'));
         $section->save();
         return response()->json($section);
     }
@@ -50,6 +51,7 @@ class SectionController extends Controller
         $section->terrain_point_b_id = $request->input('terrain_point_b');
         $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
         $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
+        $section->intermediate_points = json_encode($request->input('intermediate_points'));
         $section->save();
         return response()->json($section);
     }
