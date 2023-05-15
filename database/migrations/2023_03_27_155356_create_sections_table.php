@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("description");
+            $table->string("description")->nullable();
             $table->foreignId("mountain_range_id")->constrained();
             $table->integer("badge_points_a_to_b");
             $table->integer("badge_points_b_to_a");

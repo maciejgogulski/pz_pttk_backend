@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('terrain_points', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("description");
+            $table->string("description")->nullable();
             $table->integer("sea_level_height");
             $table->string("latitude");
             $table->string("longitude");
