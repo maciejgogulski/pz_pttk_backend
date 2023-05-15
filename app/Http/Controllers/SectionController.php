@@ -18,14 +18,23 @@ class SectionController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|regex:/[a-zA-Z]+/',
+            'mountain_range_id' => 'required|integer',
+            'terrain_point_a_id' => 'required|integer',
+            'terrain_point_b_id' => 'required|integer',
+            'badge_points_a_to_b' => 'required|integer',
+            'badge_points_b_to_a' => 'required|integer',
+        ]);
+        
         $section = new Section();
-        $section->name = $request->input('name');
+        $section->name = $validatedData['name'];
         $section->description = $request->input('description');
-        $section->mountain_range_id = $request->input('mountain_range_id');
-        $section->terrain_point_a_id = $request->input('terrain_point_a_id');
-        $section->terrain_point_b_id = $request->input('terrain_point_b_id');
-        $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
-        $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
+        $section->mountain_range_id = $validatedData['mountain_range_id'];
+        $section->terrain_point_a_id = $validatedData['terrain_point_a_id'];
+        $section->terrain_point_b_id = $validatedData['terrain_point_b_id'];
+        $section->badge_points_a_to_b = $validatedData['badge_points_a_to_b'];
+        $section->badge_points_b_to_a = $validatedData['badge_points_b_to_a'];
         $section->intermediate_points = json_encode($request->input('intermediate_points'));
         $section->save();
         return response()->json($section);
@@ -44,13 +53,22 @@ class SectionController extends Controller
      */
     public function update(Request $request, Section $section)
     {
-        $section->name = $request->input('name');
+        $validatedData = $request->validate([
+            'name' => 'required|string|regex:/[a-zA-Z]+/',
+            'mountain_range_id' => 'required|integer',
+            'terrain_point_a_id' => 'required|integer',
+            'terrain_point_b_id' => 'required|integer',
+            'badge_points_a_to_b' => 'required|integer',
+            'badge_points_b_to_a' => 'required|integer',
+        ]);
+
+        $section->name = $validatedData['name'];
         $section->description = $request->input('description');
-        $section->mountain_range_id = $request->input('mountain_range_id');
-        $section->terrain_point_a_id = $request->input('terrain_point_a');
-        $section->terrain_point_b_id = $request->input('terrain_point_b');
-        $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
-        $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
+        $section->mountain_range_id = $validatedData['mountain_range_id'];
+        $section->terrain_point_a_id = $validatedData['terrain_point_a_id'];
+        $section->terrain_point_b_id = $validatedData['terrain_point_b_id'];
+        $section->badge_points_a_to_b = $validatedData['badge_points_a_to_b'];
+        $section->badge_points_b_to_a = $validatedData['badge_points_b_to_a'];
         $section->intermediate_points = json_encode($request->input('intermediate_points'));
         $section->save();
         return response()->json($section);

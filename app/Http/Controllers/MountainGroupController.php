@@ -22,8 +22,12 @@ class MountainGroupController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/'
+        ]);
+        
         $mountainGroup = new MountainGroup();
-        $mountainGroup->name = $request->input('name');
+        $mountainGroup->name = $validatedData['name'];
         $mountainGroup->save();
         return response()->json($mountainGroup);
     }
@@ -41,7 +45,11 @@ class MountainGroupController extends Controller
      */
     public function update(Request $request, MountainGroup $mountainGroup)
     {
-        $mountainGroup->name = $request->input('name');
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/'
+        ]);
+        
+        $mountainGroup->name = $validatedData['name'];
         $mountainGroup->save();
         return response()->json($mountainGroup);
     }

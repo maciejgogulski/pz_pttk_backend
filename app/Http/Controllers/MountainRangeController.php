@@ -18,9 +18,14 @@ class MountainRangeController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'mountain_group_id' => 'required|integer|min:1',
+        ]);
+        
         $mountainRange = new MountainRange();
-        $mountainRange->name = $request->input('name');
-        $mountainRange->mountain_group_id = $request->input('mountain_group_id');
+        $mountainRange->name = $validatedData['name'];
+        $mountainRange->mountain_group_id = $validatedData['mountain_group_id'];
         $mountainRange->save();
         return response()->json($mountainRange);
     }
@@ -38,8 +43,13 @@ class MountainRangeController extends Controller
      */
     public function update(Request $request, MountainRange $mountainRange)
     {
-        $mountainRange->name = $request->input('name');
-        $mountainRange->mountain_group_id = $request->input('mountain_group_id');
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'mountain_group_id' => 'required|integer|min:1',
+        ]);
+        
+        $mountainRange->name = $validatedData['name'];
+        $mountainRange->mountain_group_id = $validatedData['mountain_group_id'];
         $mountainRange->save();
         return response()->json($mountainRange);
     }

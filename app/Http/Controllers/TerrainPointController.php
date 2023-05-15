@@ -25,12 +25,19 @@ class TerrainPointController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'sea_level_height' => 'required|numeric',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+    
         $terrainPoint = new TerrainPoint();
-        $terrainPoint->name = $request->input('name');
+        $terrainPoint->name = $validatedData['name'];
         $terrainPoint->description = $request->input('description');
-        $terrainPoint->sea_level_height = $request->input('sea_level_height');
-        $terrainPoint->latitude = $request->input('latitude');
-        $terrainPoint->longitude = $request->input('longitude');
+        $terrainPoint->sea_level_height = $validatedData['sea_level_height'];
+        $terrainPoint->latitude = $validatedData['latitude'];
+        $terrainPoint->longitude = $validatedData['longitude'];
         $terrainPoint->save();
         return response()->json($terrainPoint);
     }
@@ -48,11 +55,18 @@ class TerrainPointController extends Controller
      */
     public function update(Request $request, TerrainPoint $terrainPoint)
     {
-        $terrainPoint->name = $request->input('name');
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'sea_level_height' => 'required|numeric',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+    
+        $terrainPoint->name = $validatedData['name'];
         $terrainPoint->description = $request->input('description');
-        $terrainPoint->sea_level_height = $request->input('sea_level_height');
-        $terrainPoint->latitude = $request->input('latitude');
-        $terrainPoint->longitude = $request->input('longitude');
+        $terrainPoint->sea_level_height = $validatedData['sea_level_height'];
+        $terrainPoint->latitude = $validatedData['latitude'];
+        $terrainPoint->longitude = $validatedData['longitude'];
         $terrainPoint->save();
         return response()->json($terrainPoint);
     }
