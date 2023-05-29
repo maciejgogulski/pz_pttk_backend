@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Dodane endpointy dla UserController
     Route::post('/user/assign-role', [UserController::class, 'assignRole']);
     Route::post('/user/remove-role', [UserController::class, 'removeRole']);
+    Route::get('/user/users-with-roles', [UserController::class, 'showUsersWithRoles']);
 
     Route::group(['prefix' => 'terrain-points'], function () {
         Route::get('/', [TerrainPointController::class, 'index']);
