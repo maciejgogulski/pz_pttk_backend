@@ -16,4 +16,9 @@ class Role extends Model
         'sudety',
         'słowacja',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_roles');
+    }
 }
