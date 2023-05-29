@@ -40,5 +40,10 @@ class UserController extends Controller
         }
     }
 
+    public function showUsersWithRoles()
+    {
+        $users = User::with('roles')->get();
 
+        return response(['users' => $users], 200);
+    }
 }
