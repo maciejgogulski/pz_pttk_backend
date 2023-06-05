@@ -3,12 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -47,9 +48,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function mountainGroups(): HasMany
+    public function mountainGroups(): BelongsToMany
     {
-        return $this->hasMany(MountainGroup::class);
+        return $this->belongsToMany(MountainGroup::class, 'users_mountain_groups');
     }
 
     public function gotBook(): HasOne
@@ -94,7 +95,7 @@ class User extends Authenticatable
         $this->roles()->detach($role);
     }
 
-    public function hasRole(string $roleName)
+    public function hasRole(string $roleName): bool
     {
         return $this->roles()->where('name', $roleName)->exists();
     }

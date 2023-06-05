@@ -19,4 +19,9 @@ class MountainGroup extends Model
     {
         return $this->hasMany(MountainRange::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_mountain_groups');
+    }
 }
