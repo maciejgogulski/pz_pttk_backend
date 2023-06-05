@@ -24,66 +24,96 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // User Controller endpoints
-    Route::post('/user/assign-role', [UserController::class, 'assignRole']);
-    Route::post('/user/remove-role', [UserController::class, 'removeRole']);
+    Route::middleware('role:admin')->post('/user/assign-role', [UserController::class, 'assignRole']);
+    Route::middleware('role:admin')->post('/user/remove-role', [UserController::class, 'removeRole']);
 
     // Terrain Point endpoints
-    Route::group(['prefix' => 'terrain-points'], function () {
-        Route::get('/', [TerrainPointController::class, 'index']);
-        Route::post('/', [TerrainPointController::class, 'store']);
-        Route::get('/{terrainPoint}', [TerrainPointController::class, 'show']);
-        Route::put('/{terrainPoint}', [TerrainPointController::class, 'update']);
-        Route::delete('/{terrainPoint}', [TerrainPointController::class, 'destroy']);
+    Route::middleware('role:user')->group(function () {
+        Route::get('/terrain-points', [TerrainPointController::class, 'index']);
+        Route::get('/terrain-points/{terrainPoint}', [TerrainPointController::class, 'show']);
+    });
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/terrain-points', [TerrainPointController::class, 'index']);
+        Route::get('/terrain-points/{terrainPoint}', [TerrainPointController::class, 'show']);
+        Route::post('/terrain-points', [TerrainPointController::class, 'store']);
+        Route::put('/terrain-points/{terrainPoint}', [TerrainPointController::class, 'update']);
+        Route::delete('/terrain-points/{terrainPoint}', [TerrainPointController::class, 'destroy']);
     });
 
     // Mountain Group endpoints
-    Route::group(['prefix' => 'mountain-groups'], function () {
-        Route::get('/', [MountainGroupController::class, 'index']);
-        Route::post('/', [MountainGroupController::class, 'store']);
-        Route::get('/with-ranges', [MountainGroupController::class, 'mountainGroupsWithMountainRanges']);
-        Route::get('/{mountainGroup}', [MountainGroupController::class, 'show']);
-        Route::put('/{mountainGroup}', [MountainGroupController::class, 'update']);
-        Route::delete('/{mountainGroup}', [MountainGroupController::class, 'destroy']);
-        Route::get('/{mountainGroup}/mountain-ranges', [MountainGroupController::class, 'mountainRanges']);
+    Route::middleware('role:user')->group(function () {
+        Route::get('/mountain-groups', [MountainGroupController::class, 'index']);
+        Route::get('/mountain-groups/with-ranges', [MountainGroupController::class, 'mountainGroupsWithMountainRanges']);
+        Route::get('/mountain-groups/{mountainGroup}', [MountainGroupController::class, 'show']);
+        Route::get('/mountain-groups/{mountainGroup}/mountain-ranges', [MountainGroupController::class, 'mountainRanges']);
+    });
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/mountain-groups', [MountainGroupController::class, 'index']);
+        Route::post('/mountain-groups', [MountainGroupController::class, 'store']);
+        Route::get('/mountain-groups/with-ranges', [MountainGroupController::class, 'mountainGroupsWithMountainRanges']);
+        Route::get('/mountain-groups/{mountainGroup}', [MountainGroupController::class, 'show']);
+        Route::put('/mountain-groups/{mountainGroup}', [MountainGroupController::class, 'update']);
+        Route::delete('/mountain-groups/{mountainGroup}', [MountainGroupController::class, 'destroy']);
+        Route::get('/mountain-groups/{mountainGroup}/mountain-ranges', [MountainGroupController::class, 'mountainRanges']);
     });
 
     // Mountain Range endpoints
-    Route::group(['prefix' => 'mountain-ranges'], function () {
-        Route::get('/', [MountainRangeController::class, 'index']);
-        Route::post('/', [MountainRangeController::class, 'store']);
-        Route::get('/{mountainRange}', [MountainRangeController::class, 'show']);
-        Route::put('/{mountainRange}', [MountainRangeController::class, 'update']);
-        Route::delete('/{mountainRange}', [MountainRangeController::class, 'destroy']);
-        Route::get('/{mountainRange}/sections', [MountainRangeController::class, 'sections']);
+    Route::middleware('role:user')->group(function () {
+        Route::get('/mountain-ranges', [MountainRangeController::class, 'index']);
+        Route::get('/mountain-ranges/{mountainRange}', [MountainRangeController::class, 'show']);
+        Route::get('/mountain-ranges/{mountainRange}/sections', [MountainRangeController::class, 'sections']);
+    });
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/mountain-ranges', [MountainRangeController::class, 'index']);
+        Route::post('/mountain-ranges', [MountainRangeController::class, 'store']);
+        Route::get('/mountain-ranges/{mountainRange}', [MountainRangeController::class, 'show']);
+        Route::put('/mountain-ranges/{mountainRange}', [MountainRangeController::class, 'update']);
+        Route::delete('/mountain-ranges/{mountainRange}', [MountainRangeController::class, 'destroy']);
+        Route::get('/mountain-ranges/{mountainRange}/sections', [MountainRangeController::class, 'sections']);
     });
 
     // Section endpoints
-    Route::group(['prefix' => 'sections'], function () {
-        Route::get('/', [SectionController::class, 'index']);
-        Route::post('/', [SectionController::class, 'store']);
-        Route::get('/mountain-range/{mountainRange}/{terrainPoint?}', [SectionController::class, 'getSectionsForTripPlanning']);
-        Route::get('/{section}', [SectionController::class, 'show']);
-        Route::put('/{section}', [SectionController::class, 'update']);
-        Route::delete('/{section}', [SectionController::class, 'destroy']);
-        Route::get('/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
+    Route::middleware('role:user')->group(function () {
+        Route::get('/sections', [SectionController::class, 'index']);
+        Route::get('/sections/mountain-range/{mountainRange}/{terrainPoint?}', [SectionController::class, 'getSectionsForTripPlanning']);
+        Route::get('/sections/{section}', [SectionController::class, 'show']);
+        Route::get('/sections/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
+    });
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/sections', [SectionController::class, 'index']);
+        Route::post('/sections', [SectionController::class, 'store']);
+        Route::get('/sections/mountain-range/{mountainRange}/{terrainPoint?}', [SectionController::class, 'getSectionsForTripPlanning']);
+        Route::get('/sections/{section}', [SectionController::class, 'show']);
+        Route::put('/sections/{section}', [SectionController::class, 'update']);
+        Route::delete('/sections/{section}', [SectionController::class, 'destroy']);
+        Route::get('/sections/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
     });
 
     // Trip plan endpoints
-    Route::group(['prefix' => 'plans'], function () {
-        Route::get('/', [TripPlanController::class, 'index']);
-        Route::post('/', [TripPlanController::class, 'store']);
-        Route::get('/{tripPlan}', [TripPlanController::class, 'show']);
-        Route::put('/{tripPlan}', [TripPlanController::class, 'update']);
-        Route::delete('/{tripPlan}', [TripPlanController::class, 'destroy']);
-        Route::post('/entries', [TripPlanController::class, 'putEntry']);
-        Route::delete('/entries/{tripPlanEntry}', [TripPlanController::class, 'deleteEntry']);
+    Route::middleware('role:user')->group(function () {
+        Route::get('/plans', [TripPlanController::class, 'index']);
+        Route::get('/plans/{tripPlan}', [TripPlanController::class, 'show']);
+    });
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/plans', [TripPlanController::class, 'index']);
+        Route::post('/plans', [TripPlanController::class, 'store']);
+        Route::get('/plans/{tripPlan}', [TripPlanController::class, 'show']);
+        Route::put('/plans/{tripPlan}', [TripPlanController::class, 'update']);
+        Route::delete('/plans/{tripPlan}', [TripPlanController::class, 'destroy']);
+        Route::post('/plans/entries', [TripPlanController::class, 'putEntry']);
+        Route::delete('/plans/entries/{tripPlanEntry}', [TripPlanController::class, 'deleteEntry']);
         Route::post('/with-entries', [TripPlanController::class, 'storeWithEntries']);
         Route::put('/with-entries/{tripPlan}', [TripPlanController::class, 'updateWithEntries']);
     });
 
     // Role Controller endpoints
-    Route::post('/roles', [RoleController::class, 'createRole']);
-    Route::get('/roles', [RoleController::class, 'showRoles']);
-    Route::put('/roles/{role}', [RoleController::class, 'updateRole']);
-    Route::delete('/roles/{role}', [RoleController::class, 'deleteRole']);
+    Route::middleware('role:user')->group(function () {
+        Route::get('/roles', [RoleController::class, 'showRoles']);
+    });
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/roles', [RoleController::class, 'createRole']);
+        Route::get('/roles', [RoleController::class, 'showRoles']);
+        Route::put('/roles/{role}', [RoleController::class, 'updateRole']);
+        Route::delete('/roles/{role}', [RoleController::class, 'deleteRole']);
+    });
 });
