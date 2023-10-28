@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Section;
 use App\Models\TripPlan;
 use App\Models\TripPlanEntry;
 use Illuminate\Http\Request;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GotBookController;
 use App\Http\Controllers\TripPlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -92,4 +93,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/roles', [RoleController::class, 'showRoles']);
     Route::put('/roles/{role}', [RoleController::class, 'updateRole']);
     Route::delete('/roles/{role}', [RoleController::class, 'deleteRole']);
+
+    Route::group(['prefix' => 'got-books'], function () {
+        Route::post('/', [GotBookController::class, 'createGotBook']);
+        Route::put('/map-entry', [GotBookController::class, 'mapTripPlanEntryToGotBookEntry']);
+        Route::get('/{gotBook}/entries', [GotBookController::class, 'getAllEntriesForGotBook']);
+    });
+
 });
