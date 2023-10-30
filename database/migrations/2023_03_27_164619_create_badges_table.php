@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('badges', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->integer("point_threshold");
+            $table->string("name")->default('Nowa odznaka');;
+            $table->integer("point_threshold")->default(0);
             $table->unsignedBigInteger("next_badge")->nullable();
             $table->unsignedBigInteger("previous_badge")->nullable();
             $table->foreign('next_badge')->references('id')->on('badges')->onDelete('cascade');
