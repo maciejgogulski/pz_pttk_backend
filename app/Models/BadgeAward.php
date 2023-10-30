@@ -10,6 +10,14 @@ class BadgeAward extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'badge_id',
+        'grant_date',
+        'badge_award_status',
+        'points_from_previous_badge',
+    ];
+
     public function badge(): HasOne
     {
         return $this->hasOne(Badge::class);
