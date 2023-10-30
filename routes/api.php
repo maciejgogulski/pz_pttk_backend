@@ -1,13 +1,15 @@
 <?php
 
-use App\Http\Controllers\TripPlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
 use App\Http\Controllers\RoleController;
+
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\TripPlanController;
+use App\Http\Controllers\BadgeAwardController;
 use App\Http\Controllers\TerrainPointController;
 use App\Http\Controllers\MountainGroupController;
 use App\Http\Controllers\MountainRangeController;
@@ -87,6 +89,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/with-entries/{tripPlan}', [TripPlanController::class, 'updateWithEntries']);
     });
 
+    // Badge endpoints
+    Route::group(['prefix' => 'badges'], function () {
+        Route::get('/', [BadgeController::class, 'index']);
+        Route::post('/', [BadgeController::class, 'store']);
+        Route::get('/{badge}', [BadgeController::class, 'show']);
+        Route::put('/{badge}', [BadgeController::class, 'update']);
+        Route::delete('/{badge}', [BadgeController::class, 'destroy']);
+    });
+
+    //BadgeAward endpoints
+    Route::group(['prefix' => 'badge-awards'], function () {
+        Route::get('/', [BadgeAwardController::class, 'index']);
+        Route::post('/', [BadgeAwardController::class, 'store']);
+        Route::get('/{badgeAward}', [BadgeAwardController::class, 'show']);
+        Route::put('/{badgeAward}', [BadgeAwardController::class, 'update']);
+        Route::delete('/{badgeAward}', [BadgeAwardController::class, 'destroy']);
+    });
+    
     // Role Controller endpoints
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::get('/roles', [RoleController::class, 'showRoles']);
