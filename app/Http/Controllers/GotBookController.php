@@ -27,7 +27,7 @@ class GotBookController extends Controller
         $gotBookEntry->badge_award_id = $request->badge_award_id;
         $gotBookEntry->status = GotBookEntryStatus::WAITING_FOR_LEADER_VERIFICATION->name;
         $gotBookEntry->b_to_a = $request->b_to_a;
-        $gotBookEntry->trip_plan_entry_id = $request->id;
+        $gotBookEntry->trip_plan_entry_id = $request->trip_plan_entry_id;
 
         $gotBookEntry->save();
         return response()->json($gotBookEntry);
