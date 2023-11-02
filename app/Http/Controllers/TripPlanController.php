@@ -42,7 +42,7 @@ class TripPlanController extends Controller
     public function show(TripPlan $tripPlan)
     {
         return TripPlan::query()
-            ->with('tripPlanEntries')
+            ->with(['tripPlanEntries', 'tripPlanEntries.section'])
             ->where('id' ,'=', $tripPlan->id)
             ->get()->first();
     }
