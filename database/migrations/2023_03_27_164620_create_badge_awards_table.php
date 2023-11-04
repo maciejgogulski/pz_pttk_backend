@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained();
             $table->foreignId("badge_id")->constrained();
-            $table->date("grant_date");
+            $table->date("grant_date")->nullable();
             $table->string("badge_award_status");
             $table->integer('points_from_previous_badge')->nullable();
             $table->timestamps();

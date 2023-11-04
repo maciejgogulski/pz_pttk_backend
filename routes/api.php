@@ -95,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/roles/{role}', [RoleController::class, 'deleteRole']);
 
     Route::group(['prefix' => 'got-books'], function () {
+        Route::get('/', [GotBookController::class, 'getGotBook']);
         Route::post('/', [GotBookController::class, 'createGotBook']);
         Route::put('/map-entry', [GotBookController::class, 'mapTripPlanEntryToGotBookEntry']);
         Route::get('/{gotBook}/entries', [GotBookController::class, 'getAllEntriesForGotBook']);

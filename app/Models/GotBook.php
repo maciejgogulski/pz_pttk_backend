@@ -11,6 +11,8 @@ class GotBook extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['got_book_id'];
+
     public function tourist(): HasOne
     {
         return $this->hasOne(User::class);

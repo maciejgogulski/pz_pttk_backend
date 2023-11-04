@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BadgeAwardStatus;
 use App\Enums\GotBookEntryStatus;
+use App\Models\BadgeAward;
 use App\Models\GotBook;
 use App\Models\GotBookEntry;
 use Illuminate\Http\Request;
@@ -10,12 +12,32 @@ use Illuminate\Support\Facades\Auth;
 
 class GotBookController extends Controller
 {
-    public function createGotBook(Request $request)
+    public function getGotBook() {
+        return GotBook::where("user_id", Auth::user()->id)->first();
+    }
+
+    public function createGotBook()
     {
+        $gotBook = GotBook::where("user_id", Auth::user()->id)->first();
+
+        if ($gotBook) {
+           return response()->json(['message' => 'User already has GOT book'], 400);
+        }
+
         $gotBook = new GotBook();
-        $gotBook->got_book_id = $request->got_book_id;
+        $gotBook->got_book_id = date('Y');
         $gotBook->user_id = Auth::user()->id;
         $gotBook->save();
+        $gotBook->got_book_id = $gotBook->id . '/' . $gotBook->got_book_id;
+        $gotBook->save();
+
+        $badgeAward = new BadgeAward();
+        $badgeAward->user_id = Auth::user()->id;
+        $badgeAward->badge_id = 1;
+        $badgeAward->badge_award_status = BadgeAwardStatus::COLLECTING_POINTS->name;
+        $badgeAward->points_from_previous_badge = 0;
+        $badgeAward->save();
+
         return response()->json($gotBook);
     }
 
