@@ -157,4 +157,16 @@ class TripPlanController extends Controller
         $tripPlan->load('tripPlanEntries');
         return response()->json($tripPlan);
     }
+
+    public function getAllMappedEntriesForTrip(TripPlan $tripPlan) {
+        return TripPlanEntry::where('trip_plan_id', $tripPlan->id)
+            ->with('section')
+            ->has('gotBookEntry')->get();
+    }
+
+    public function getAllUnmappedEntriesForTrip(TripPlan $tripPlan) {
+        return TripPlanEntry::where('trip_plan_id', $tripPlan->id)
+            ->with('section')
+            ->doesntHave('gotBookEntry')->get();
+    }
 }

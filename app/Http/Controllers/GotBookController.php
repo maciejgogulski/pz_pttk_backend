@@ -7,6 +7,7 @@ use App\Enums\GotBookEntryStatus;
 use App\Models\BadgeAward;
 use App\Models\GotBook;
 use App\Models\GotBookEntry;
+use App\Models\TripPlanEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,5 +58,13 @@ class GotBookController extends Controller
 
     public function getAllEntriesForGotBook(GotBook $gotBook) {
         return GotBookEntry::where('got_book_id', $gotBook->id);
+    }
+
+    public function getLatestBadgeAward() {
+        return BadgeAward::where('user_id', Auth::user()->id)
+            ->where('badge_award_status', BadgeAwardStatus::COLLECTING_POINTS->name)
+            ->where('grant_date', null)
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 }
