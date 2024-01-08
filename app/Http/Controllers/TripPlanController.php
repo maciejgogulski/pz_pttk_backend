@@ -6,6 +6,7 @@ use App\Models\TripPlan;
 use App\Models\TripPlanEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TripPlanController extends Controller
 {
@@ -137,6 +138,11 @@ class TripPlanController extends Controller
         $tripPlan->user_id = Auth::user()->id;
 
         $tripPlan->save();
+
+        // Unlink existing TripPlanEntry models
+        DB::table('got_book_entries')
+        ->where('trip_plan_entry_id', $tripPlan->tripPlanEntries->pluck('id')->toArray())
+        ->update(['trip_plan_entry_id' => null]);
 
         // Delete previously existing TripPlanEntry models
         $tripPlan->tripPlanEntries()->delete();
